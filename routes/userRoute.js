@@ -9,7 +9,7 @@ router.get('/', userController.user_list_get);
 router.get('/:id', userController.user_get);
 
 router.post('/', (req, res) => {
-  console.log(req.body.email);
+  console.log(req.body);
 });
 
 router.put('/', (req, res) => {
