@@ -1,20 +1,28 @@
 'use strict';
-
 const userModel = require('../models/userModel');
+
 const users = userModel.users;
 
-const user_list_get = (req, res) => {
-  users.map(kayttaja => delete kayttaja.password);
+const user_list_get = async (req, res) => {
+  const users = await userModel.getAllUsers();
   res.json(users);
 };
 
-const user_get = (req, res) => {
+const user_get = async (req, res) => {
   const id = req.params.id;
-  const user = users.filter(kayttaja => kayttaja.id === id).pop();
-  delete user.password;
+  const user = await userModel.getUser(id);
   res.json(user);
 };
 
+const user_create_post = async (req, res) => {
+  console.log(req.body);
+  //object destructuring
+  const {name, email, passwd} = req.body;
+  const params = [name, email, passwd];
+  const user = await userModel.addUser(params);
+  res.json({message: 'User added'});
+};
+
 module.exports = {
-  user_list_get, user_get,
+  user_list_get, user_get, user_create_post,
 };
