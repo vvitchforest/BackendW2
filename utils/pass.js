@@ -5,6 +5,7 @@ const userModel = require('../models/userModel');
 const passportJWT = require('passport-jwt');
 const JWTStrategy = passportJWT.Strategy;
 const ExtractJWT = passportJWT.ExtractJwt;
+const bcrypt = require('bcryptjs');
 
 // local strategy for username password login
 passport.use(new Strategy(
@@ -16,7 +17,7 @@ passport.use(new Strategy(
         if (user === undefined) {
           return done(null, false, {message: 'Incorrect email.'});
         }
-        if (user.password !== password) {
+        if (!bcrypt.compareSync(password, user.password)) {
           return done(null, false, {message: 'Incorrect password.'});
         }
         return done(null, {...user}, {message: 'Logged In Successfully'}); // use spread syntax to create shallow copy to get rid of binary row type
